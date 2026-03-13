@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+<title>CricScript AI — Match Script Leaked</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Anton&family=Barlow+Condensed:wght@400;600;700;800;900&family=Share+Tech+Mono&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --lime: #C8FF00;
+  --lime2: #AAFF00;
+  --green: #00FF44;
+  --black: #000000;
+  --dark: #0a0a0a;
+  --dark2: #111111;
+  --dark3: #161616;
+  --red: #FF1F1F;
+  --white: #FFFFFF;
+  --gray: #888888;
+}
+
+body {
+  background: var(--black);
+  font-family: 'Barlow Condensed', sans-serif;
+  overflow-x: hidden;
+  color: var(--white);
+}
+
+::-webkit-scrollbar { width: 3px; }
+::-webkit-scrollbar-thumb { background: var(--lime); }
+
+/* MARQUEE */
+.marquee-bar {
+  background: var(--red);
+  overflow: hidden;
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  border-bottom: 3px solid #000;
+}
+.marquee-inner {
+  display: inline-block;
+  animation: scroll-left 10s linear infinite;
+  padding: 9px 0;
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(13px, 3.5vw, 17px);
+  letter-spacing: 3px;
+  color: #fff;
+}
+@keyframes scroll-left {
+  0%   { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* LOGO STRIP */
+.logo-strip {
+  background: var(--dark2);
+  border-bottom: 3px solid var(--lime);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.logo-strip img {
+  width: 54px; height: 54px;
+  object-fit: contain;
+  filter: drop-shadow(0 0 10px rgba(200,255,0,0.5));
+}
+.brand-name {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(22px, 6vw, 32px);
+  color: var(--lime);
+  letter-spacing: 4px;
+  text-shadow: 0 0 20px rgba(200,255,0,0.4);
+  flex: 1;
+  padding-left: 10px;
+}
+.live-badge {
+  background: var(--red);
+  color: #fff;
+  font-family: 'Bebas Neue', cursive;
+  font-size: 13px;
+  letter-spacing: 2px;
+  padding: 5px 12px;
+  border: 2px solid #000;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.live-dot { width:7px; height:7px; background:#fff; border-radius:50%; animation:blink-dot 0.8s step-end infinite; }
+@keyframes blink-dot { 0%,100%{opacity:1;} 50%{opacity:0;} }
+
+/* HERO */
+.hero { background: var(--black); padding: 0; position: relative; overflow: hidden; }
+.hero::before {
+  content: '';
+  position: absolute; top: -100px; right: -80px;
+  width: 300px; height: 700px;
+  background: var(--lime); opacity: 0.04;
+  transform: rotate(20deg); pointer-events: none;
+}
+
+.hero-inner { padding: 28px 20px 0; max-width: 480px; margin: 0 auto; }
+
+.tag-line {
+  display: inline-block;
+  background: var(--lime); color: #000;
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(11px,3vw,14px); letter-spacing: 4px;
+  padding: 4px 14px; margin-bottom: 16px;
+}
+
+.hero-headline {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(46px,14vw,86px);
+  line-height: 0.92; color: var(--white);
+  letter-spacing: 2px; margin-bottom: 6px;
+}
+.hero-headline .accent { color: var(--lime); }
+.hero-headline .danger { color: var(--red); }
+
+.hero-sub {
+  font-size: clamp(15px,4vw,18px); font-weight: 700;
+  color: rgba(255,255,255,0.75); line-height: 1.5;
+  margin-bottom: 22px; letter-spacing: 0.3px;
+}
+.hero-sub strong { color: var(--lime); }
+
+/* STATS */
+.stats-row {
+  display: grid; grid-template-columns: repeat(3,1fr);
+  gap: 0; border: 2px solid var(--lime); margin-bottom: 24px;
+}
+.stat-item {
+  padding: 12px 8px; text-align: center;
+  border-right: 2px solid var(--lime);
+  background: var(--dark2);
+}
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(26px,8vw,38px); color: var(--lime);
+  line-height: 1; letter-spacing: 1px;
+}
+.stat-lbl {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 9px; color: var(--gray);
+  letter-spacing: 2px; text-transform: uppercase; margin-top: 2px;
+}
+
+/* VIDEO BOX */
+.video-wrap { position: relative; margin: 0 auto 24px; max-width: 240px; }
+.video-box {
+  aspect-ratio: 9/16; background: var(--dark2);
+  border: 3px solid var(--lime);
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 10px;
+}
+.video-box::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 3px;
+  background: var(--lime); box-shadow: 0 0 20px var(--lime);
+  animation: scan-line 3s ease-in-out infinite;
+}
+@keyframes scan-line { 0%{top:0;opacity:1;} 100%{top:100%;opacity:0;} }
+.video-label { font-family:'Bebas Neue',cursive; font-size:16px; color:var(--lime); letter-spacing:4px; position:relative; z-index:2; }
+.video-icon { font-size:52px; position:relative; z-index:2; }
+.video-note { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--gray); letter-spacing:2px; text-align:center; padding:0 16px; position:relative; z-index:2; }
+.vc { position:absolute; width:18px; height:18px; border-color:var(--lime); border-style:solid; }
+.vc.tl { top:6px; left:6px; border-width:3px 0 0 3px; }
+.vc.tr { top:6px; right:6px; border-width:3px 3px 0 0; }
+.vc.bl { bottom:6px; left:6px; border-width:0 0 3px 3px; }
+.vc.br { bottom:6px; right:6px; border-width:0 3px 3px 0; }
+
+/* BUTTONS */
+.btn-main {
+  display: flex; align-items: center; justify-content: center; gap: 10px;
+  width: 100%; background: var(--lime); color: #000;
+  font-family: 'Bebas Neue', cursive;
+  font-size: clamp(18px,5vw,24px); letter-spacing: 3px;
+  padding: 18px 20px; border: none; border-bottom: 5px solid #2a3a00;
+  text-decoration: none; cursor: pointer; position: relative; overflow: hidden;
+  animation: btn-pulse 1.8s ease-in-out infinite; transition: transform 0.1s;
+}
+.btn-main::after {
+  content: ''; position: absolute; top:0; left:-100%;
+  width:60%; height:100%; background:rgba(255,255,255,0.25);
+  transform:skewX(-20deg); animation:shine 2.2s ease-in-out infinite;
+}
+@keyframes shine { 0%{left:-100%;} 100%{left:200%;} }
+@keyframes btn-pulse {
+  0%,100% { box-shadow:0 0 0 rgba(200,255,0,0); }
+  50% { box-shadow:0 0 30px rgba(200,255,0,0.6), 0 0 60px rgba(200,255,0,0.2); }
+}
+.btn-main:active { transform:translateY(3px); border-bottom-width:2px; }
+
+.btn-outline {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; background:transparent; color:var(--lime);
+  font-family:'Bebas Neue',cursive; font-size:clamp(16px,4.5vw,21px);
+  letter-spacing:3px; padding:15px 20px; border:3px solid var(--lime);
+  text-decoration:none; cursor:pointer;
+}
+
+.btn-red {
+  display:flex; align-items:center; justify-content:center; gap:10px;
+  width:100%; background:var(--red); color:#fff;
+  font-family:'Bebas Neue',cursive; font-size:clamp(18px,5vw,24px);
+  letter-spacing:3px; padding:18px 20px; border:none; border-bottom:5px solid #800000;
+  text-decoration:none; cursor:pointer;
+  animation:btn-pulse-red 1.8s ease-in-out infinite;
+}
+@keyframes btn-pulse-red {
+  0%,100% { box-shadow:0 0 0 rgba(255,31,31,0); }
+  50% { box-shadow:0 0 30px rgba(255,31,31,0.5); }
+}
+
+/* DIVIDERS */
+.divider { height:4px; background:var(--lime); width:100%; }
+.divider-red { height:4px; background:var(--red); width:100%; }
+
+/* SECTIONS */
+.section { padding:32px 20px; max-width:480px; margin:0 auto; }
+.section-tag {
+  display:inline-flex; align-items:center; gap:8px; margin-bottom:14px;
+}
+.section-tag span { font-family:'Bebas Neue',cursive; font-size:13px; letter-spacing:4px; color:var(--lime); }
+.section-tag::before { content:''; display:inline-block; width:24px; height:3px; background:var(--lime); }
+.section-title {
+  font-family:'Bebas Neue',cursive; font-size:clamp(34px,10vw,56px);
+  line-height:0.95; color:var(--white); letter-spacing:2px; margin-bottom:20px;
+}
+.section-title .lime { color:var(--lime); }
+
+/* TERMINAL */
+.terminal { background:#050f05; border:2px solid var(--lime); border-top:4px solid var(--lime); overflow:hidden; }
+.terminal-topbar { background:var(--lime); padding:7px 14px; display:flex; align-items:center; justify-content:space-between; }
+.terminal-title { font-family:'Bebas Neue',cursive; font-size:14px; letter-spacing:3px; color:#000; }
+.terminal-dots { display:flex; gap:6px; }
+.tdot { width:11px; height:11px; border-radius:50%; border:2px solid rgba(0,0,0,0.3); }
+.tdot.r{background:#ff5f57;} .tdot.y{background:#ffbd2e;} .tdot.g{background:#28ca42;}
+.terminal-body { padding:16px; font-family:'Share Tech Mono',monospace; font-size:clamp(11px,2.8vw,13px); }
+.tline { color:#00cc33; line-height:1.8; opacity:0; transition:opacity 0.2s; }
+.tline.show { opacity:1; }
+.tline .cmd { color:rgba(0,204,51,0.5); }
+.tline .ok { color:var(--lime); font-weight:bold; }
+.tline .warn { color:#FFD700; }
+.tline .hl { color:#00ffff; }
+.cursor { display:inline-block; width:8px; height:13px; background:#00cc33; margin-left:3px; vertical-align:middle; animation:blink-dot 0.7s step-end infinite; }
+
+/* PROOF */
+.proof-list { display:flex; flex-direction:column; gap:2px; }
+.proof-item { background:var(--dark2); border-left:4px solid var(--lime); padding:14px 16px; display:flex; align-items:flex-start; gap:14px; }
+.proof-icon { width:32px; height:32px; min-width:32px; background:var(--lime); color:#000; display:flex; align-items:center; justify-content:center; font-family:'Bebas Neue',cursive; font-size:14px; letter-spacing:1px; }
+.proof-title { font-family:'Bebas Neue',cursive; font-size:clamp(17px,5vw,22px); color:var(--lime); letter-spacing:2px; line-height:1.1; margin-bottom:4px; }
+.proof-desc { font-size:clamp(13px,3.5vw,15px); font-weight:600; color:rgba(255,255,255,0.65); line-height:1.4; }
+
+/* TESTIMONIALS */
+.testi { background:var(--dark2); border-top:3px solid var(--lime); padding:16px; margin-bottom:2px; }
+.testi-text { font-size:clamp(14px,3.8vw,16px); font-weight:700; color:rgba(255,255,255,0.85); line-height:1.5; margin-bottom:12px; }
+.testi-author { display:flex; align-items:center; gap:10px; }
+.testi-avatar { width:34px; height:34px; background:var(--lime); color:#000; font-family:'Bebas Neue',cursive; font-size:18px; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.testi-name { font-family:'Bebas Neue',cursive; font-size:16px; color:var(--lime); letter-spacing:2px; }
+.testi-meta { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--gray); }
+.stars { color:var(--lime); letter-spacing:3px; font-size:13px; margin-left:auto; }
+
+/* URGENCY */
+.urgency-bar {
+  background:#1a0000; border:2px solid var(--red); border-left:5px solid var(--red);
+  padding:12px 16px; display:flex; align-items:center; gap:12px; margin-bottom:16px;
+}
+.urgency-text { font-family:'Bebas Neue',cursive; font-size:clamp(16px,4.5vw,20px); color:var(--red); letter-spacing:2px; line-height:1.2; }
+.urgency-sub { font-family:'Share Tech Mono',monospace; font-size:10px; color:rgba(255,31,31,0.6); margin-top:2px; }
+
+/* COUNTDOWN */
+.countdown-section { background:var(--dark2); border-top:4px solid var(--red); padding:28px 20px; }
+.countdown-title { font-family:'Bebas Neue',cursive; font-size:clamp(20px,6vw,30px); color:var(--white); letter-spacing:3px; text-align:center; margin-bottom:4px; }
+.countdown-sub { font-family:'Share Tech Mono',monospace; font-size:11px; color:var(--red); letter-spacing:3px; text-align:center; margin-bottom:20px; }
+.countdown-grid { display:flex; justify-content:center; align-items:center; gap:8px; margin-bottom:24px; }
+.cd-box { background:#000; border:2px solid var(--red); text-align:center; padding:12px 16px; min-width:70px; }
+.cd-num { font-family:'Bebas Neue',cursive; font-size:clamp(40px,11vw,60px); color:var(--red); line-height:1; text-shadow:0 0 20px rgba(255,31,31,0.6); }
+.cd-lbl { font-family:'Share Tech Mono',monospace; font-size:9px; color:rgba(255,31,31,0.6); letter-spacing:3px; margin-top:4px; }
+.cd-sep { font-family:'Bebas Neue',cursive; font-size:46px; color:var(--red); line-height:1; opacity:0.6; margin-bottom:16px; animation:blink-dot 1s step-end infinite; }
+
+/* OR LINE */
+.or-line { display:flex; align-items:center; gap:12px; margin:12px 0; }
+.or-line::before,.or-line::after { content:''; flex:1; height:1px; background:rgba(200,255,0,0.2); }
+.or-text { font-family:'Share Tech Mono',monospace; font-size:10px; color:var(--gray); letter-spacing:2px; }
+
+/* FOOTER */
+.footer { background:#000; border-top:4px solid var(--lime); padding:24px 20px; text-align:center; }
+.footer-logo { width:50px; height:50px; object-fit:contain; margin:0 auto 8px; display:block; opacity:0.8; }
+.footer-brand { font-family:'Bebas Neue',cursive; font-size:22px; color:var(--lime); letter-spacing:5px; }
+.footer-note { font-family:'Share Tech Mono',monospace; font-size:9px; color:var(--gray); letter-spacing:1px; margin-top:10px; line-height:1.6; }
+@keyframes btn-pulse-tg {
+  0%,100% { box-shadow:0 0 0 rgba(42,171,238,0); }
+  50% { box-shadow:0 0 30px rgba(42,171,238,0.7), 0 0 60px rgba(42,171,238,0.3); }
+}
+</style>
+</head>
+<body>
+
+<!-- MARQUEE -->
+<div class="marquee-bar">
+  <div class="marquee-inner">
+    🚨 ALERT: MATCH 1 AI SCRIPT LEAKED &nbsp;•&nbsp; LIMITED SPOTS ON TELEGRAM &nbsp;•&nbsp; 97.3% ACCURACY LAST 30 MATCHES &nbsp;•&nbsp; WANKHEDE DATA PROCESSED &nbsp;•&nbsp; FREE ACCESS — JOIN NOW &nbsp;•&nbsp; 🔴 NEXT SCRIPT READY &nbsp;•&nbsp; JOIN BEFORE SLOTS FILL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    🚨 ALERT: MATCH 1 AI SCRIPT LEAKED &nbsp;•&nbsp; LIMITED SPOTS ON TELEGRAM &nbsp;•&nbsp; 97.3% ACCURACY LAST 30 MATCHES &nbsp;•&nbsp; WANKHEDE DATA PROCESSED &nbsp;•&nbsp; FREE ACCESS — JOIN NOW &nbsp;•&nbsp; 🔴 NEXT SCRIPT READY &nbsp;•&nbsp; JOIN BEFORE SLOTS FILL &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+  </div>
+</div>
+
+<!-- LOGO STRIP -->
+<div class="logo-strip">
+  <img src="1000009000.png" alt="CS">
+  <div class="brand-name">CRICSCRIPT AI</div>
+  <div class="live-badge"><div class="live-dot"></div> LIVE</div>
+</div>
+
+<!-- HERO -->
+<div class="hero">
+  <div class="hero-inner">
+    <div class="tag-line">⚡ AI MATCH ANALYSIS ENGINE</div>
+    <h1 class="hero-headline">
+      STOP<br>LOSING ON<br><span class="danger">DUMB</span><br><span class="accent">PREDICTIONS.</span>
+    </h1>
+    <p class="hero-sub">
+      Our <strong>Neural Network</strong> crunched 5 years of IPL data.
+      Get today's <strong>exact match script</strong> and hidden player stats —
+      before the bookies react.
+    </p>
+
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-num">97.3%</div>
+        <div class="stat-lbl">ACCURACY</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">50K+</div>
+        <div class="stat-lbl">MEMBERS</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-num">5 YRS</div>
+        <div class="stat-lbl">DATA</div>
+      </div>
+    </div>
+
+    <!-- PRIMARY CTA — FIRST THING AFTER HEADLINE -->
+    <a href="https://t.me/+Z9YypqZCtKpmOGU1" target="_blank" class="btn-main" style="margin-bottom:10px; font-size:clamp(20px,6vw,28px); padding:22px 20px; border-bottom-width:7px; background:#2AABEE; color:#fff; border-bottom-color:#1a7ab0; animation:btn-pulse-tg 1.8s ease-in-out infinite;">
+      <svg width="28" height="28" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.67l-2.95-.924c-.64-.203-.653-.64.136-.954l11.57-4.461c.537-.194 1.006.131.85.89z"/>
+      </svg>
+      ACCESS FREE AI PREDICTIONS
+    </a>
+
+    <div class="urgency-bar" style="margin-bottom:20px;">
+      <span style="font-size:22px;">🔥</span>
+      <div>
+        <div class="urgency-text">ONLY 47 FREE SPOTS LEFT</div>
+        <div class="urgency-sub">CLOSES WHEN LIMIT HITS — NO EXCEPTIONS</div>
+      </div>
+    </div>
+
+    <div class="video-wrap">
+      <div class="video-box">
+        <div class="vc tl"></div><div class="vc tr"></div>
+        <div class="vc bl"></div><div class="vc br"></div>
+        <div class="video-label">[ AI BRIEFING ]</div>
+        <div class="video-icon">🤖</div>
+        <div class="video-note">PASTE YOUR VIDEO / AI AVATAR HERE<br>RATIO: 9:16</div>
+      </div>
+    </div>
+
+    <div style="margin-bottom:28px;"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TERMINAL -->
+<div style="background:#050f05; padding:28px 20px;">
+  <div style="max-width:480px; margin:0 auto;">
+    <div class="section-tag"><span>LIVE AI ENGINE</span></div>
+    <div class="section-title" style="margin-bottom:16px;">NEURAL NET <span class="lime">STATUS</span></div>
+    <div class="terminal">
+      <div class="terminal-topbar">
+        <div class="terminal-title">CRICSCRIPT_AI_v3.exe — BASH</div>
+        <div class="terminal-dots">
+          <div class="tdot r"></div><div class="tdot y"></div><div class="tdot g"></div>
+        </div>
+      </div>
+      <div class="terminal-body">
+        <div class="tline" id="t1"><span class="cmd">$ </span>boot cricscript_neural_net --mode=IPL2025</div>
+        <div class="tline" id="t2"><span class="cmd">$ </span>Fetching Wankhede pitch data... <span class="warn">PROCESSING</span></div>
+        <div class="tline" id="t3">&nbsp;&nbsp;→ Pitch: <span class="hl">DRY / SPIN-FRIENDLY / 78% spin wicket prob</span></div>
+        <div class="tline" id="t4"><span class="cmd">$ </span>Wankhede pitch data... <span class="ok">✓ SUCCESS</span></div>
+        <div class="tline" id="t5"><span class="cmd">$ </span>Loading H2H player stats + injury flags... <span class="warn">LOADING</span></div>
+        <div class="tline" id="t6"><span class="cmd">$ </span>Running 10,000 match simulations... <span class="ok">✓ SUCCESS</span></div>
+        <div class="tline" id="t7">&nbsp;&nbsp;→ Win probability delta: <span class="hl">+23% vs market odds</span></div>
+        <div class="tline" id="t8"><span class="cmd">$ </span>Toss bias analysis complete... <span class="ok">✓ SUCCESS</span></div>
+        <div class="tline" id="t9"><span class="cmd">$ </span>Generating profitable picks... <span class="ok">✓ SUCCESS</span></div>
+        <div class="tline" id="t10" style="color:#C8FF00; font-weight:bold;"><span class="cmd">$ </span>SCRIPT READY → DELIVERING TO TELEGRAM ⚡</div>
+        <div id="t-end"><span class="cursor"></span></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- WHAT YOU GET -->
+<div class="section" style="background:var(--black);">
+  <div class="section-tag"><span>INSIDE TELEGRAM</span></div>
+  <div class="section-title">WHAT YOU<br><span class="lime">GET FREE</span></div>
+  <div class="proof-list">
+    <div class="proof-item">
+      <div class="proof-icon">01</div>
+      <div>
+        <div class="proof-title">PRE-MATCH AI SCRIPT</div>
+        <div class="proof-desc">Pitch, toss, weather, H2H — all crunched into one clear match script every game</div>
+      </div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-icon">02</div>
+      <div>
+        <div class="proof-title">HIDDEN PLAYER STATS</div>
+        <div class="proof-desc">Under-the-radar data bookies don't price in — you get edge before markets move</div>
+      </div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-icon">03</div>
+      <div>
+        <div class="proof-title">10,000 SIM WIN PROBABILITY</div>
+        <div class="proof-desc">AI runs 10,000 simulations per match. You get the exact edge. Not a guess.</div>
+      </div>
+    </div>
+    <div class="proof-item">
+      <div class="proof-icon">04</div>
+      <div>
+        <div class="proof-title">DREAM11 TEAM BUILDER</div>
+        <div class="proof-desc">AI-optimized fantasy lineups to maximize winnings every single match</div>
+      </div>
+    </div>
+  </div>
+  <div style="margin-top:24px;">
+    <a href="https://t.me/+Z9YypqZCtKpmOGU1" target="_blank" class="btn-main">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="black" style="flex-shrink:0;">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.67l-2.95-.924c-.64-.203-.653-.64.136-.954l11.57-4.461c.537-.194 1.006.131.85.89z"/>
+      </svg>
+      JOIN TELEGRAM — IT'S FREE
+    </a>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- TESTIMONIALS -->
+<div class="section" style="background:var(--dark3);">
+  <div class="section-tag"><span>MEMBER PROOF</span></div>
+  <div class="section-title">REAL<br><span class="lime">RESULTS</span></div>
+  <div class="testi">
+    <div class="testi-text">"Joined 3 months ago. Script was correct 28 out of 30 matches. My account is up 4x. No other channel even comes close to this."</div>
+    <div class="testi-author">
+      <div class="testi-avatar">R</div>
+      <div><div class="testi-name">@Rohit_D11</div><div class="testi-meta">Mumbai • Verified Member</div></div>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+  <div class="testi">
+    <div class="testi-text">"They predicted exact playing XI before the official announcement dropped. Their AI source is unreal bhai. Best decision joining."</div>
+    <div class="testi-author">
+      <div class="testi-avatar" style="background:#00ffff;color:#000;">A</div>
+      <div><div class="testi-name">@Arjun_Cricket</div><div class="testi-meta">Hyderabad • Verified Member</div></div>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+  <div class="testi">
+    <div class="testi-text">"Free channel with premium level data. Toss prediction + top picks alone are worth it. Never missing another match script."</div>
+    <div class="testi-author">
+      <div class="testi-avatar" style="background:#ff1f1f;color:#fff;">V</div>
+      <div><div class="testi-name">@Vivek_IPL</div><div class="testi-meta">Bangalore • Verified Member</div></div>
+      <div class="stars">★★★★★</div>
+    </div>
+  </div>
+</div>
+
+<div class="divider-red"></div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-section">
+  <div style="max-width:480px; margin:0 auto;">
+    <div class="countdown-title">NEXT MATCH SCRIPT DELETES IN</div>
+    <div class="countdown-sub">// SCRIPT AUTO-DELETED WHEN MATCH STARTS</div>
+    <div class="countdown-grid">
+      <div class="cd-box"><div class="cd-num" id="cd-h">05</div><div class="cd-lbl">HOURS</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-m">42</div><div class="cd-lbl">MINS</div></div>
+      <div class="cd-sep">:</div>
+      <div class="cd-box"><div class="cd-num" id="cd-s">17</div><div class="cd-lbl">SECS</div></div>
+    </div>
+
+    <div class="urgency-bar">
+      <span style="font-size:24px;flex-shrink:0;">⚠️</span>
+      <div>
+        <div class="urgency-text">DON'T MISS THIS SCRIPT</div>
+        <div class="urgency-sub">ONCE MATCH STARTS — SCRIPT IS GONE FOREVER</div>
+      </div>
+    </div>
+
+    <a href="https://t.me/+Z9YypqZCtKpmOGU1" target="_blank" class="btn-red" style="margin-bottom:10px;">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="white" style="flex-shrink:0;">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.67l-2.95-.924c-.64-.203-.653-.64.136-.954l11.57-4.461c.537-.194 1.006.131.85.89z"/>
+      </svg>
+      ⚡ GRAB MY FREE SPOT NOW
+    </a>
+    <div class="or-line"><div class="or-text">OR</div></div>
+    <a href="https://t.me/+Z9YypqZCtKpmOGU1" target="_blank" class="btn-outline">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="#C8FF00" style="flex-shrink:0;">
+        <path d="M12 0C5.373 0 0 5.373 0 12s5.373 12 12 12 12-5.373 12-12S18.627 0 12 0zm5.894 8.221l-1.97 9.28c-.145.658-.537.818-1.084.508l-3-2.21-1.447 1.394c-.16.16-.295.295-.605.295l.213-3.053 5.56-5.023c.242-.213-.054-.333-.373-.12L7.088 13.67l-2.95-.924c-.64-.203-.653-.64.136-.954l11.57-4.461c.537-.194 1.006.131.85.89z"/>
+      </svg>
+      VIEW FREE AI TIPS TODAY
+    </a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<div class="footer">
+  <img src="1000009000.png" alt="CricScript AI" class="footer-logo">
+  <div class="footer-brand">CRICSCRIPT AI</div>
+  <div class="footer-note">
+    AI ANALYTICS & MATCH PREDICTIONS<br>
+    @agtelegramservice &nbsp;|&nbsp; @Aguru19<br><br>
+    For entertainment & educational purposes only.<br>Predictions based on historical data analysis.
+  </div>
+</div>
+
+<script>
+// Countdown
+(function(){
+  let total = (5*3600)+(42*60)+17;
+  const h=document.getElementById('cd-h'),m=document.getElementById('cd-m'),s=document.getElementById('cd-s');
+  function tick(){
+    if(total<=0) total=(5*3600)+(59*60)+59;
+    h.textContent=String(Math.floor(total/3600)).padStart(2,'0');
+    m.textContent=String(Math.floor((total%3600)/60)).padStart(2,'0');
+    s.textContent=String(total%60).padStart(2,'0');
+    total--;
+  }
+  tick(); setInterval(tick,1000);
+})();
+
+// Terminal
+(function(){
+  const lines=document.querySelectorAll('.tline');
+  lines.forEach((l,i)=>setTimeout(()=>l.classList.add('show'),i*380+600));
+})();
+</script>
+</body>
+</html>
+
