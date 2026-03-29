@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Football Analyst | Free Football Insights Channel</title>
+  <meta name="description" content="Free daily football match analysis, top league previews and expert insights. Join The Football Analyst on Telegram." />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Barlow+Condensed:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold:    #c9912a;
+      --gold2:   #f0c040;
+      --gold3:   #ffd966;
+      --silver:  #d4d4d4;
+      --bg:      #06080a;
+      --bg2:     #0d1117;
+      --tg:      #2AABEE;
+      --red:     #ef4444;
+      --white:   #f5f0e8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #020304;
+      display: flex; justify-content: center; align-items: flex-start;
+      min-height: 100vh;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+
+    /* 9:16 frame */
+    .frame {
+      width: 100%; max-width: 390px;
+      aspect-ratio: 9/16; min-height: 693px;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+
+    /* Background — diagonal gold lines like a pitch */
+    .bg-pitch {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        repeating-linear-gradient(
+          -55deg,
+          transparent,
+          transparent 38px,
+          rgba(201,145,42,0.03) 38px,
+          rgba(201,145,42,0.03) 40px
+        );
+    }
+    .bg-glow {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background:
+        radial-gradient(ellipse 70% 35% at 50% 0%, rgba(201,145,42,0.10) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 25% at 50% 100%, rgba(42,171,238,0.05) 0%, transparent 70%);
+    }
+
+    /* TOP HEADER BAR */
+    .topbar {
+      position: relative; z-index: 2;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 16px 5px;
+      border-bottom: 1px solid rgba(201,145,42,0.12);
+    }
+    .topbar-left {
+      display: flex; align-items: center; gap: 6px;
+    }
+    .shield-mini {
+      font-size: 14px;
+      filter: drop-shadow(0 0 4px rgba(201,145,42,0.7));
+    }
+    .topbar-name {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 13px; letter-spacing: 2.5px;
+      color: var(--gold2);
+      text-shadow: 0 0 10px rgba(201,145,42,0.5);
+    }
+    .live-pill {
+      display: flex; align-items: center; gap: 5px;
+      background: rgba(34,197,94,0.1);
+      border: 1px solid rgba(34,197,94,0.3);
+      border-radius: 20px; padding: 3px 9px;
+      font-size: 10px; font-weight: 800; letter-spacing: 1.5px;
+      color: #4ade80;
+    }
+    .live-pill::before {
+      content: ''; width: 6px; height: 6px;
+      background: #4ade80; border-radius: 50%;
+      box-shadow: 0 0 6px #4ade80;
+      animation: blink 1s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.2; } }
+
+    /* LOGO + TITLE HERO */
+    .hero {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 10px 16px 6px;
+    }
+
+    /* Hexagon logo frame */
+    .hex-wrap {
+      position: relative; width: 94px; height: 94px;
+      margin-bottom: 10px;
+    }
+    .hex-bg {
+      position: absolute; inset: 0;
+      background: conic-gradient(from 0deg, var(--gold) 0%, var(--gold2) 20%, transparent 35%, transparent 65%, var(--gold2) 80%, var(--gold) 100%);
+      border-radius: 50%;
+      animation: spin-slow 6s linear infinite;
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+    }
+    .hex-bg2 {
+      position: absolute; inset: -6px;
+      background: conic-gradient(from 180deg, transparent 0%, rgba(201,145,42,0.25) 30%, transparent 60%, rgba(240,192,64,0.2) 90%, transparent 100%);
+      border-radius: 50%;
+      animation: spin-slow 6s linear infinite reverse;
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+    }
+    @keyframes spin-slow { to { transform: rotate(360deg); } }
+    .hex-img {
+      position: absolute; inset: 4px;
+      border-radius: 50%; overflow: hidden;
+      background: #0a0c0f;
+      box-shadow: 0 0 20px rgba(201,145,42,0.4), 0 0 40px rgba(201,145,42,0.15);
+    }
+    .hex-img img {
+      width: 100%; height: 100%; object-fit: cover; border-radius: 50%;
+    }
+
+    /* Gold divider line */
+    .gold-line {
+      width: 60px; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--gold2), transparent);
+      margin: 0 auto 6px;
+      box-shadow: 0 0 10px var(--gold);
+    }
+
+    .channel-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 21px; font-weight: 900;
+      color: var(--white); text-align: center; line-height: 1.1;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 30px rgba(201,145,42,0.3);
+    }
+    .channel-name span { color: var(--gold2); }
+    .channel-tagline {
+      font-family: 'Bebas Neue', sans-serif;
+      font-size: 11px; letter-spacing: 3px;
+      color: var(--gold); text-align: center; margin-top: 4px;
+      text-shadow: 0 0 10px rgba(201,145,42,0.5);
+      animation: glow-tag 2.5s ease-in-out infinite;
+    }
+    @keyframes glow-tag {
+      0%,100%{ text-shadow: 0 0 10px rgba(201,145,42,0.5); opacity:1; }
+      50%{ text-shadow: 0 0 22px rgba(240,192,64,0.7), 0 0 40px rgba(201,145,42,0.3); opacity:0.85; }
+    }
+
+    /* LEAGUES STRIP */
+    .leagues-strip {
+      position: relative; z-index: 2;
+      margin: 7px 16px;
+      background: linear-gradient(90deg, rgba(201,145,42,0.08), rgba(201,145,42,0.03), rgba(201,145,42,0.08));
+      border: 1px solid rgba(201,145,42,0.22);
+      border-radius: 10px; padding: 7px 12px;
+      display: flex; align-items: center; justify-content: space-between;
+    }
+    .league-item {
+      display: flex; flex-direction: column; align-items: center; gap: 2px;
+      flex: 1;
+    }
+    .league-item + .league-item {
+      border-left: 1px solid rgba(201,145,42,0.15);
+    }
+    .league-flag { font-size: 16px; line-height: 1; }
+    .league-name { font-size: 8px; font-weight: 700; letter-spacing: 0.8px; color: rgba(255,255,255,0.45); text-align: center; }
+
+    /* TIMER */
+    .timer-section {
+      position: relative; z-index: 2;
+      margin: 0 16px 7px;
+      background: linear-gradient(135deg, rgba(239,68,68,0.13), rgba(239,68,68,0.04));
+      border: 1px solid rgba(239,68,68,0.38); border-radius: 12px;
+      padding: 9px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 0 18px rgba(239,68,68,0.12);
+    }
+    .timer-left { display: flex; align-items: center; gap: 8px; }
+    .timer-icon { font-size: 20px; animation: shake 2s ease-in-out infinite; }
+    @keyframes shake {
+      0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(-10deg); } 75%{ transform:rotate(10deg); }
+    }
+    .timer-text { font-size: 11px; font-weight: 700; letter-spacing: 0.8px; color: #fca5a5; line-height: 1.3; }
+    .timer-text strong { display: block; font-size: 13px; color: #fff; }
+    .timer-display { display: flex; align-items: center; gap: 4px; }
+    .timer-digit {
+      background: rgba(239,68,68,0.18); border: 1px solid rgba(239,68,68,0.45);
+      border-radius: 6px; padding: 4px 8px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #fff;
+      min-width: 40px; text-align: center;
+      box-shadow: 0 0 10px rgba(239,68,68,0.25);
+      text-shadow: 0 0 14px rgba(239,68,68,0.8); line-height: 1;
+      transition: color 0.3s, text-shadow 0.3s;
+    }
+    .timer-colon {
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--red);
+      animation: blink 1s step-end infinite; text-shadow: 0 0 10px var(--red);
+    }
+    .timer-label { font-size: 9px; text-align: center; color: rgba(255,255,255,0.35); letter-spacing: 1px; margin-top: 1px; }
+    .timer-digit.urgent { color: var(--red); text-shadow: 0 0 20px var(--red), 0 0 40px rgba(239,68,68,0.5); }
+
+    /* STATS */
+    .stats-row {
+      position: relative; z-index: 2;
+      display: flex; gap: 7px; padding: 0 16px; margin-bottom: 7px;
+    }
+    .stat-card {
+      flex: 1;
+      background: linear-gradient(135deg, rgba(201,145,42,0.08), rgba(201,145,42,0.03));
+      border: 1px solid rgba(201,145,42,0.18);
+      border-radius: 10px; padding: 8px 4px; text-align: center;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1;
+      color: var(--gold2); text-shadow: 0 0 12px rgba(201,145,42,0.6);
+    }
+    .stat-label { font-size: 9px; letter-spacing: 1px; color: rgba(255,255,255,0.38); margin-top: 2px; }
+
+    /* SLOTS BAR */
+    .slots-bar {
+      position: relative; z-index: 2;
+      margin: 0 16px 7px;
+      background: rgba(201,145,42,0.05); border: 1px solid rgba(201,145,42,0.18);
+      border-radius: 10px; padding: 8px 12px;
+    }
+    .slots-top {
+      display: flex; justify-content: space-between;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .slots-label { color: rgba(255,255,255,0.45); }
+    .slots-count { color: var(--gold2); text-shadow: 0 0 8px var(--gold); }
+    .bar-track { background: rgba(255,255,255,0.06); border-radius: 4px; height: 5px; overflow: hidden; }
+    .bar-fill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--gold2), var(--tg));
+      box-shadow: 0 0 10px rgba(201,145,42,0.5);
+      width: 68%; animation: barGrow 1.5s ease both 0.5s;
+    }
+    @keyframes barGrow { from{ width:0; } to{ width:68%; } }
+
+    /* CTA — Telegram Blue */
+    .cta-section { position: relative; z-index: 2; padding: 0 16px 6px; }
+    .cta-btn {
+      display: flex; align-items: stretch; text-decoration: none; width: 100%;
+      border-radius: 13px; overflow: hidden;
+      background: linear-gradient(135deg, #1a8bc4 0%, #1272a8 40%, #0a5a8a 100%);
+      box-shadow:
+        0 0 0 1.5px rgba(42,171,238,0.6),
+        0 0 28px rgba(42,171,238,0.6),
+        0 0 60px rgba(42,171,238,0.25),
+        0 6px 22px rgba(0,0,0,0.55);
+      animation: tg-pulse 2.2s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes tg-pulse {
+      0%,100%{ box-shadow: 0 0 0 1.5px rgba(42,171,238,0.6), 0 0 28px rgba(42,171,238,0.6), 0 0 60px rgba(42,171,238,0.25), 0 6px 22px rgba(0,0,0,0.55); }
+      50%{ box-shadow: 0 0 0 2.5px rgba(42,171,238,0.8), 0 0 42px rgba(42,171,238,0.8), 0 0 80px rgba(42,171,238,0.38), 0 6px 22px rgba(0,0,0,0.55); }
+    }
+    .cta-btn::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: skewX(-15deg);
+      animation: shine 3.5s ease-in-out infinite 1.5s;
+    }
+    @keyframes shine { 0%,100%{ left:-100%; } 45%,55%{ left:150%; } }
+    .cta-icon-col {
+      background: rgba(0,0,0,0.2); border-right: 1px solid rgba(255,255,255,0.14);
+      padding: 13px 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .cta-body {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 12px 8px;
+    }
+    .cta-top {
+      font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px;
+      color: #fff; line-height: 1;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    }
+    .cta-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.65); margin-top: 2px;
+    }
+    .cta-chevron {
+      background: rgba(0,0,0,0.18); border-left: 1px solid rgba(255,255,255,0.14);
+      padding: 13px 13px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: rgba(255,255,255,0.8); flex-shrink: 0;
+    }
+
+    /* FEATURES */
+    .features {
+      position: relative; z-index: 2;
+      padding: 6px 16px 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .feat-row {
+      display: flex; align-items: center; gap: 10px;
+      background: linear-gradient(90deg, rgba(201,145,42,0.08), rgba(201,145,42,0.02));
+      border: 1px solid rgba(201,145,42,0.16); border-radius: 9px; padding: 8px 11px;
+      animation: slideIn 0.5s ease both;
+    }
+    .feat-row:nth-child(1){ animation-delay:0.08s; }
+    .feat-row:nth-child(2){ animation-delay:0.16s; }
+    .feat-row:nth-child(3){ animation-delay:0.24s; }
+    @keyframes slideIn { from{ opacity:0; transform:translateX(-8px); } to{ opacity:1; transform:translateX(0); } }
+    .feat-icon { font-size: 17px; flex-shrink: 0; filter: drop-shadow(0 0 5px rgba(201,145,42,0.6)); }
+    .feat-text { font-size: 13px; font-weight: 600; color: #e8e0d0; line-height: 1.2; }
+    .feat-badge {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      background: rgba(201,145,42,0.15); color: var(--gold2);
+      border: 1px solid rgba(201,145,42,0.3);
+      padding: 2px 7px; border-radius: 20px;
+    }
+
+    /* FOOTER */
+    .footer {
+      position: relative; z-index: 2;
+      padding: 7px 16px 10px; text-align: center; margin-top: auto;
+      border-top: 1px solid rgba(201,145,42,0.08);
+    }
+    .footer-trust { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.3); margin-bottom: 3px; }
+    .footer-trust span { color: var(--gold2); }
+    .footer-note { font-size: 10px; color: rgba(255,255,255,0.16); letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+<div class="frame">
+  <div class="bg-pitch"></div>
+  <div class="bg-glow"></div>
+
+  <!-- Top bar -->
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="shield-mini">🛡️</div>
+      <div class="topbar-name">THE FOOTBALL ANALYST</div>
+    </div>
+    <div class="live-pill">LIVE</div>
+  </div>
+
+  <!-- Hero / Logo -->
+  <div class="hero">
+    <div class="hex-wrap">
+      <div class="hex-bg"></div>
+      <div class="hex-bg2"></div>
+      <div class="hex-img">
+        <img src="falogo.png" alt="The Football Analyst" />
+      </div>
+    </div>
+    <div class="gold-line"></div>
+    <div class="channel-name">THE <span>FOOTBALL</span> ANALYST</div>
+    <div class="channel-tagline">PREMIER LEAGUES • FREE ANALYSIS • DAILY INSIGHTS</div>
+  </div>
+
+  <!-- Leagues strip -->
+  <div class="leagues-strip">
+    <div class="league-item">
+      <div class="league-flag">🏴󠁧󠁢󠁥󠁮󠁧󠁿</div>
+      <div class="league-name">PREMIER<br>LEAGUE</div>
+    </div>
+    <div class="league-item">
+      <div class="league-flag">🇪🇸</div>
+      <div class="league-name">LA<br>LIGA</div>
+    </div>
+    <div class="league-item">
+      <div class="league-flag">🇩🇪</div>
+      <div class="league-name">BUNDES<br>LIGA</div>
+    </div>
+    <div class="league-item">
+      <div class="league-flag">🇮🇹</div>
+      <div class="league-name">SERIE<br>A</div>
+    </div>
+    <div class="league-item">
+      <div class="league-flag">🏆</div>
+      <div class="league-name">CHAMP<br>LEAGUE</div>
+    </div>
+  </div>
+
+  <!-- Timer -->
+  <div class="timer-section">
+    <div class="timer-left">
+      <div class="timer-icon">⚡</div>
+      <div class="timer-text">
+        <strong>Limited Time Offer</strong>
+        Join Free — Right Now!
+      </div>
+    </div>
+    <div>
+      <div class="timer-display">
+        <div>
+          <div class="timer-digit" id="t-min">00</div>
+          <div class="timer-label">MIN</div>
+        </div>
+        <div class="timer-colon">:</div>
+        <div>
+          <div class="timer-digit" id="t-sec">59</div>
+          <div class="timer-label">SEC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="stats-row">
+    <div class="stat-card">
+      <div class="stat-num">15K+</div>
+      <div class="stat-label">MEMBERS</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">5</div>
+      <div class="stat-label">TOP LEAGUES</div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-num">FREE</div>
+      <div class="stat-label">ALWAYS</div>
+    </div>
+  </div>
+
+  <!-- Slots bar -->
+  <div class="slots-bar">
+    <div class="slots-top">
+      <span class="slots-label">SLOTS FILLING FAST</span>
+      <span class="slots-count">10,241 / 15,000 Joined</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill"></div></div>
+  </div>
+
+  <!-- CTA -->
+  <div class="cta-section">
+    <a class="cta-btn" href="https://t.me/thefootballanalyst" target="_blank">
+      <div class="cta-icon-col">✈️</div>
+      <div class="cta-body">
+        <div class="cta-top">JOIN TELEGRAM CHANNEL</div>
+        <div class="cta-sub">TAP TO JOIN — 100% FREE</div>
+      </div>
+      <div class="cta-chevron">›</div>
+    </a>
+  </div>
+
+  <!-- Features -->
+  <div class="features">
+    <div class="feat-row">
+      <div class="feat-icon">⚽</div>
+      <div class="feat-text">Daily Match Previews &amp; Analysis</div>
+      <div class="feat-badge">DAILY</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">📋</div>
+      <div class="feat-text">Top Leagues Coverage — UCL, EPL &amp; More</div>
+      <div class="feat-badge">5 LEAGUES</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">📊</div>
+      <div class="feat-text">Stats, Form &amp; Expert Match Breakdowns</div>
+      <div class="feat-badge">EXPERT</div>
+    </div>
+  </div>
+
+  <!-- Footer -->
+  <div class="footer">
+    <div class="footer-trust">⭐ <span>15,000+ Football Fans</span> Trust Us</div>
+    <div class="footer-note">For football knowledge &amp; analysis only. 18+ only.</div>
+  </div>
+</div>
+
+<script>
+  function startTimer() {
+    const secEl = document.getElementById('t-sec');
+    const minEl = document.getElementById('t-min');
+    let total = 59;
+    const tick = () => {
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      minEl.textContent = String(m).padStart(2, '0');
+      secEl.textContent = String(s).padStart(2, '0');
+      if (s <= 10 && m === 0) {
+        secEl.classList.add('urgent'); minEl.classList.add('urgent');
+      } else {
+        secEl.classList.remove('urgent'); minEl.classList.remove('urgent');
+      }
+      total = total <= 0 ? 59 : total - 1;
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
+  startTimer();
+</script>
+</body>
+</html>
