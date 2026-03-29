@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mortal Cricket Trader | Free Cricket Analysis Channel</title>
+  <meta name="description" content="Get free daily cricket match analysis and insights. Join thousands of cricket fans on Telegram." />
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;600;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #f5c518;
+      --tg: #2AABEE;
+      --tg2: #1a8bc4;
+      --green: #22c55e;
+      --red: #ef4444;
+      --bg: #050a0f;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: #020508;
+      display: flex; justify-content: center; align-items: flex-start;
+      min-height: 100vh;
+      font-family: 'Barlow Condensed', sans-serif;
+    }
+    .phone-frame {
+      width: 100%; max-width: 390px;
+      aspect-ratio: 9/16; min-height: 693px;
+      background: var(--bg);
+      position: relative; overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .bg-layer {
+      position: absolute; inset: 0; pointer-events: none; z-index: 0;
+      background:
+        radial-gradient(ellipse 80% 40% at 50% 0%, rgba(245,197,24,0.07) 0%, transparent 70%),
+        radial-gradient(ellipse 60% 30% at 50% 100%, rgba(42,171,238,0.06) 0%, transparent 70%);
+    }
+    .grid-lines {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background-image:
+        linear-gradient(rgba(245,197,24,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(245,197,24,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      animation: gridMove 20s linear infinite;
+    }
+    @keyframes gridMove { 0%{ transform:translateY(0); } 100%{ transform:translateY(40px); } }
+
+    /* TOPBAR */
+    .topbar {
+      position: relative; z-index: 2;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 16px 6px;
+    }
+    .topbar-badge {
+      font-family: 'Bebas Neue', sans-serif; font-size: 11px; letter-spacing: 2px;
+      color: var(--gold); border: 1px solid rgba(245,197,24,0.4);
+      padding: 3px 8px; border-radius: 4px;
+      text-shadow: 0 0 8px var(--gold);
+      animation: pulse-gold 2s ease-in-out infinite;
+    }
+    @keyframes pulse-gold {
+      0%,100%{ text-shadow: 0 0 8px var(--gold); }
+      50%{ text-shadow: 0 0 18px var(--gold), 0 0 35px rgba(245,197,24,0.4); }
+    }
+    .live-dot {
+      display: flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; color: var(--green);
+    }
+    .live-dot::before {
+      content: ''; width: 7px; height: 7px; background: var(--green); border-radius: 50%;
+      box-shadow: 0 0 8px var(--green), 0 0 16px var(--green);
+      animation: blink 1s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{ opacity:1; } 50%{ opacity:0.3; } }
+
+    /* LOGO */
+    .logo-section {
+      position: relative; z-index: 2;
+      display: flex; flex-direction: column; align-items: center;
+      padding: 6px 16px 4px;
+    }
+    .logo-ring { position: relative; width: 88px; height: 88px; margin-bottom: 8px; }
+    .logo-ring::before, .logo-ring::after {
+      content: ''; position: absolute; inset: -4px; border-radius: 50%;
+      animation: spin 4s linear infinite;
+    }
+    .logo-ring::before {
+      background: conic-gradient(from 0deg, transparent 0%, var(--gold) 25%, transparent 50%, var(--tg) 75%, transparent 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 3px), black calc(100% - 3px));
+    }
+    .logo-ring::after {
+      inset: -8px;
+      background: conic-gradient(from 180deg, transparent 0%, rgba(245,197,24,0.3) 25%, transparent 50%, rgba(42,171,238,0.3) 75%, transparent 100%);
+      -webkit-mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+      mask: radial-gradient(farthest-side, transparent calc(100% - 2px), black calc(100% - 2px));
+      animation-direction: reverse;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .logo-emoji-fallback {
+      width: 88px; height: 88px; border-radius: 50%;
+      background: linear-gradient(135deg, #0d1f2d, #061018);
+      display: flex; align-items: center; justify-content: center; font-size: 36px;
+      border: 2px solid rgba(245,197,24,0.5);
+      box-shadow: 0 0 20px rgba(245,197,24,0.35), 0 0 40px rgba(245,197,24,0.12);
+    }
+    .channel-name {
+      font-family: 'Bebas Neue', sans-serif; font-size: 26px; letter-spacing: 2px;
+      color: #fff; text-align: center; line-height: 1;
+      text-shadow: 0 0 24px rgba(245,197,24,0.35);
+    }
+    .channel-sub {
+      font-size: 11px; font-weight: 600; letter-spacing: 2px;
+      color: var(--gold); text-align: center; margin-top: 3px;
+      animation: pulse-gold 2.5s ease-in-out infinite;
+    }
+
+    /* TIMER */
+    .timer-section {
+      position: relative; z-index: 2;
+      margin: 8px 16px 7px;
+      background: linear-gradient(135deg, rgba(239,68,68,0.12), rgba(239,68,68,0.04));
+      border: 1px solid rgba(239,68,68,0.4); border-radius: 12px;
+      padding: 9px 14px;
+      display: flex; align-items: center; justify-content: space-between;
+      box-shadow: 0 0 18px rgba(239,68,68,0.14), inset 0 0 16px rgba(239,68,68,0.04);
+    }
+    .timer-left { display: flex; align-items: center; gap: 8px; }
+    .timer-icon { font-size: 20px; animation: shake 2s ease-in-out infinite; }
+    @keyframes shake {
+      0%,100%{ transform:rotate(0deg); } 25%{ transform:rotate(-10deg); } 75%{ transform:rotate(10deg); }
+    }
+    .timer-text { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #fca5a5; line-height: 1.3; }
+    .timer-text strong { display: block; font-size: 13px; color: #fff; }
+    .timer-display { display: flex; align-items: center; gap: 4px; }
+    .timer-digit {
+      background: rgba(239,68,68,0.2); border: 1px solid rgba(239,68,68,0.5);
+      border-radius: 6px; padding: 4px 8px;
+      font-family: 'Bebas Neue', sans-serif; font-size: 28px; color: #fff;
+      min-width: 40px; text-align: center;
+      box-shadow: 0 0 10px rgba(239,68,68,0.3);
+      text-shadow: 0 0 15px rgba(239,68,68,0.8); line-height: 1;
+    }
+    .timer-colon {
+      font-family: 'Bebas Neue', sans-serif; font-size: 24px; color: var(--red);
+      animation: blink 1s step-end infinite; text-shadow: 0 0 10px var(--red);
+    }
+    .timer-label { font-size: 9px; text-align: center; color: rgba(255,255,255,0.4); letter-spacing: 1px; margin-top: 1px; }
+    .timer-digit.urgent { color: var(--red); text-shadow: 0 0 20px var(--red); }
+
+    /* STATS */
+    .stats-row {
+      position: relative; z-index: 2;
+      display: flex; gap: 8px; padding: 0 16px; margin-bottom: 7px;
+    }
+    .stat-pill {
+      flex: 1; background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 10px; padding: 7px 6px; text-align: center;
+    }
+    .stat-num {
+      font-family: 'Bebas Neue', sans-serif; font-size: 20px; line-height: 1;
+      color: var(--gold); text-shadow: 0 0 10px rgba(245,197,24,0.5);
+    }
+    .stat-label { font-size: 9px; letter-spacing: 1px; color: rgba(255,255,255,0.4); margin-top: 2px; }
+
+    /* SLOTS BAR */
+    .slots-bar {
+      position: relative; z-index: 2;
+      margin: 0 16px 8px;
+      background: rgba(245,197,24,0.05); border: 1px solid rgba(245,197,24,0.2);
+      border-radius: 10px; padding: 8px 12px;
+    }
+    .slots-top {
+      display: flex; justify-content: space-between;
+      font-size: 11px; font-weight: 700; letter-spacing: 1px; margin-bottom: 6px;
+    }
+    .slots-label { color: rgba(255,255,255,0.5); }
+    .slots-count { color: var(--gold); text-shadow: 0 0 8px var(--gold); }
+    .bar-track { background: rgba(255,255,255,0.06); border-radius: 4px; height: 5px; overflow: hidden; }
+    .bar-fill {
+      height: 100%; border-radius: 4px;
+      background: linear-gradient(90deg, var(--gold), var(--tg));
+      box-shadow: 0 0 10px rgba(245,197,24,0.5);
+      width: 73%; animation: barGrow 1.5s ease both 0.5s;
+    }
+    @keyframes barGrow { from{ width:0; } to{ width:73%; } }
+
+    /* CTA — Telegram Blue */
+    .cta-section { position: relative; z-index: 2; padding: 0 16px 6px; }
+    .cta-btn {
+      display: flex; align-items: stretch; text-decoration: none; width: 100%;
+      border-radius: 14px; overflow: hidden;
+      background: linear-gradient(135deg, #32b8f5 0%, #1f9ed4 40%, #0d7ab0 100%);
+      box-shadow:
+        0 0 0 1.5px rgba(42,171,238,0.6),
+        0 0 28px rgba(42,171,238,0.6),
+        0 0 60px rgba(42,171,238,0.28),
+        0 8px 24px rgba(0,0,0,0.55);
+      animation: tg-pulse 2.2s ease-in-out infinite;
+      position: relative;
+    }
+    @keyframes tg-pulse {
+      0%,100%{ box-shadow: 0 0 0 1.5px rgba(42,171,238,0.6), 0 0 28px rgba(42,171,238,0.6), 0 0 60px rgba(42,171,238,0.28), 0 8px 24px rgba(0,0,0,0.55); }
+      50%{ box-shadow: 0 0 0 2.5px rgba(42,171,238,0.8), 0 0 42px rgba(42,171,238,0.8), 0 0 80px rgba(42,171,238,0.4), 0 8px 24px rgba(0,0,0,0.55); }
+    }
+    .cta-btn::after {
+      content: ''; position: absolute; top: 0; left: -100%; width: 55%; height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+      transform: skewX(-15deg);
+      animation: shine 3.5s ease-in-out infinite 1.5s;
+    }
+    @keyframes shine { 0%,100%{ left:-100%; } 45%,55%{ left:150%; } }
+
+    .cta-icon-col {
+      background: rgba(0,0,0,0.2);
+      border-right: 1px solid rgba(255,255,255,0.14);
+      padding: 14px 15px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px; flex-shrink: 0;
+    }
+    .cta-body {
+      flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center;
+      padding: 13px 8px;
+    }
+    .cta-top {
+      font-family: 'Bebas Neue', sans-serif; font-size: 19px; letter-spacing: 3px;
+      color: #fff; line-height: 1;
+      text-shadow: 0 1px 8px rgba(0,0,0,0.3);
+    }
+    .cta-sub {
+      font-size: 10px; font-weight: 700; letter-spacing: 1.5px;
+      color: rgba(255,255,255,0.65); margin-top: 2px;
+    }
+    .cta-chevron {
+      background: rgba(0,0,0,0.18); border-left: 1px solid rgba(255,255,255,0.14);
+      padding: 14px 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 20px; color: rgba(255,255,255,0.8); flex-shrink: 0;
+    }
+
+    /* FEATURES */
+    .features {
+      position: relative; z-index: 2;
+      padding: 7px 16px 0;
+      display: flex; flex-direction: column; gap: 5px;
+    }
+    .feat-row {
+      display: flex; align-items: center; gap: 10px;
+      background: linear-gradient(90deg, rgba(42,171,238,0.07), rgba(42,171,238,0.02));
+      border: 1px solid rgba(42,171,238,0.15); border-radius: 9px; padding: 8px 11px;
+      animation: fadeIn 0.5s ease both;
+    }
+    .feat-row:nth-child(1){ animation-delay:0.1s; }
+    .feat-row:nth-child(2){ animation-delay:0.2s; }
+    @keyframes fadeIn { from{ opacity:0; transform:translateX(-8px); } to{ opacity:1; transform:translateX(0); } }
+    .feat-icon { font-size: 17px; flex-shrink: 0; filter: drop-shadow(0 0 5px rgba(42,171,238,0.5)); }
+    .feat-text { font-size: 13px; font-weight: 600; color: #e2e8f0; line-height: 1.2; }
+    .feat-badge {
+      margin-left: auto; flex-shrink: 0;
+      font-size: 9px; font-weight: 700; letter-spacing: 1px;
+      background: rgba(42,171,238,0.15); color: var(--tg);
+      border: 1px solid rgba(42,171,238,0.3);
+      padding: 2px 7px; border-radius: 20px;
+    }
+
+    /* FOOTER */
+    .footer {
+      position: relative; z-index: 2;
+      padding: 7px 16px 10px; text-align: center; margin-top: auto;
+    }
+    .footer-trust { font-size: 11px; font-weight: 700; letter-spacing: 1px; color: rgba(255,255,255,0.35); margin-bottom: 3px; }
+    .footer-trust span { color: var(--gold); }
+    .footer-note { font-size: 10px; color: rgba(255,255,255,0.18); letter-spacing: 0.5px; }
+  </style>
+</head>
+<body>
+<div class="phone-frame">
+  <div class="bg-layer"></div>
+  <div class="grid-lines"></div>
+
+  <div class="topbar">
+    <div class="topbar-badge">MORTAL CRICKET</div>
+    <div class="live-dot">LIVE</div>
+  </div>
+
+  <div class="logo-section">
+    <div class="logo-ring">
+      <img src="logomortal.png" alt="Mortal Cricket Trader" style="width:88px;height:88px;border-radius:50%;object-fit:cover;border:2px solid rgba(245,197,24,0.5);box-shadow:0 0 20px rgba(245,197,24,0.35),0 0 40px rgba(245,197,24,0.12);" />
+    </div>
+    <div class="channel-name">MORTAL CRICKET TRADER</div>
+    <div class="channel-sub">FREE CRICKET ANALYSIS • MATCH INSIGHTS</div>
+  </div>
+
+  <div class="timer-section">
+    <div class="timer-left">
+      <div class="timer-icon">⚡</div>
+      <div class="timer-text">
+        <strong>Limited Time Offer</strong>
+        Join Free — Right Now!
+      </div>
+    </div>
+    <div>
+      <div class="timer-display">
+        <div>
+          <div class="timer-digit" id="t-min">00</div>
+          <div class="timer-label">MIN</div>
+        </div>
+        <div class="timer-colon">:</div>
+        <div>
+          <div class="timer-digit" id="t-sec">59</div>
+          <div class="timer-label">SEC</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="stats-row">
+    <div class="stat-pill">
+      <div class="stat-num">10K+</div>
+      <div class="stat-label">MEMBERS</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-num">87%</div>
+      <div class="stat-label">ACCURACY</div>
+    </div>
+    <div class="stat-pill">
+      <div class="stat-num">FREE</div>
+      <div class="stat-label">ALWAYS</div>
+    </div>
+  </div>
+
+  <div class="slots-bar">
+    <div class="slots-top">
+      <span class="slots-label">SLOTS FILLING FAST</span>
+      <span class="slots-count">7,327 / 10,000 Joined</span>
+    </div>
+    <div class="bar-track"><div class="bar-fill"></div></div>
+  </div>
+
+  <div class="cta-section">
+    <a class="cta-btn" href="https://t.me/+X6Zy-oWTk2wyNDA1" target="_blank">
+      <div class="cta-icon-col">✈️</div>
+      <div class="cta-body">
+        <div class="cta-top">JOIN TELEGRAM CHANNEL</div>
+        <div class="cta-sub">TAP TO JOIN — 100% FREE</div>
+      </div>
+      <div class="cta-chevron">›</div>
+    </a>
+  </div>
+
+  <div class="features">
+    <div class="feat-row">
+      <div class="feat-icon">📊</div>
+      <div class="feat-text">Daily Match Analysis &amp; Previews</div>
+      <div class="feat-badge">DAILY</div>
+    </div>
+    <div class="feat-row">
+      <div class="feat-icon">🗣️</div>
+      <div class="feat-text">Easy Hindi Language Cricket Tips</div>
+      <div class="feat-badge">HINDI</div>
+    </div>
+  </div>
+
+  <div class="footer">
+    <div class="footer-trust">⭐ <span>10,000+ Cricket Fans</span> Trust Us</div>
+    <div class="footer-note">For cricket knowledge &amp; analysis only. 18+ only.</div>
+  </div>
+</div>
+
+<script>
+  function startTimer() {
+    const secEl = document.getElementById('t-sec');
+    const minEl = document.getElementById('t-min');
+    let total = 59;
+    const tick = () => {
+      const m = Math.floor(total / 60);
+      const s = total % 60;
+      minEl.textContent = String(m).padStart(2, '0');
+      secEl.textContent = String(s).padStart(2, '0');
+      if (s <= 10 && m === 0) {
+        secEl.classList.add('urgent'); minEl.classList.add('urgent');
+      } else {
+        secEl.classList.remove('urgent'); minEl.classList.remove('urgent');
+      }
+      total = total <= 0 ? 59 : total - 1;
+    };
+    tick();
+    setInterval(tick, 1000);
+  }
+  startTimer();
+</script>
+</body>
+</html>
