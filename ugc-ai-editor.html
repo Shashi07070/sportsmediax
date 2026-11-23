@@ -117,6 +117,25 @@ section{padding:clamp(56px,8vw,110px) clamp(16px,5vw,80px)}
 .portfolio-desc{font-size:.83rem;color:var(--muted);line-height:1.6}
 .card-del{margin-top:12px;background:rgba(255,80,80,.12);color:#ff7b7b;border:0;border-radius:8px;padding:6px 12px;font-size:.75rem;cursor:pointer}
 
+[hidden]{display:none!important}
+.type-picker{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:16px;margin-top:34px}
+.type-card{background:var(--card);border:1px solid var(--border);border-radius:20px;padding:24px;text-align:left;cursor:pointer;display:flex;flex-direction:column;gap:6px;transition:transform .25s,border-color .25s}
+.type-card:hover{transform:translateY(-4px);border-color:rgba(0,255,136,.45)}
+.type-emoji{font-size:2rem}
+.type-name{font-family:'Syne',sans-serif;font-weight:700;font-size:1.05rem}
+.type-sub{font-size:.82rem;color:var(--muted);line-height:1.5}
+.type-count{margin-top:8px;font-size:.78rem;color:var(--neon);font-weight:600}
+.results-bar{display:flex;align-items:center;gap:16px;flex-wrap:wrap;margin:30px 0 20px}
+.back-btn{background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--white);padding:10px 18px;border-radius:50px;font-size:.82rem;font-weight:500;cursor:pointer}
+.back-btn:hover{border-color:rgba(0,255,136,.4);color:var(--neon)}
+.results-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700}
+.results-cta{margin-top:26px;background:var(--card);border:1px solid rgba(0,255,136,.3);border-radius:18px;padding:20px}
+.modal-cta{margin-top:18px;padding-top:16px;border-top:1px solid var(--border)}
+.cta-title{font-family:'Syne',sans-serif;font-weight:700;font-size:.95rem;margin-bottom:12px}
+.modal-video iframe{width:100%;height:100%;border:0;display:block}
+.modal-alt{font-size:.78rem;margin-top:10px}
+.modal-alt a{color:var(--muted)}
+
 /* SERVICES */
 #services{background:var(--dark)}
 .services-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,250px),1fr));gap:18px;margin-top:46px}
@@ -349,8 +368,13 @@ body.admin #adminBtn{display:block}
   <div class="container">
     <span class="section-label reveal">Portfolio</span>
     <h2 class="section-title reveal">Work That <span class="grad-text">Speaks Results</span></h2>
-    <div class="filter-tabs reveal" id="filterTabs"></div>
-    <div class="portfolio-grid" id="portfolioGrid"></div>
+    <p class="section-sub reveal">What type of video do you need? Pick one and I'll show you matching demos.</p>
+    <div class="type-picker" id="typePicker"></div>
+    <div id="results" hidden>
+      <div class="results-bar"><button class="back-btn" id="backBtn" type="button">← Change video type</button><span class="results-title" id="resultsTitle"></span></div>
+      <div class="portfolio-grid" id="portfolioGrid"></div>
+      <div class="results-cta" id="resultsCta"></div>
+    </div>
   </div>
 </section>
 
@@ -484,6 +508,8 @@ body.admin #adminBtn{display:block}
     <div class="modal-title" id="modalTitle"></div>
     <div class="modal-desc" id="modalDesc"></div>
     <div class="modal-platform" id="modalPlatform"></div>
+    <div class="modal-alt" id="modalAlt"></div>
+    <div class="modal-cta" id="modalCta"></div>
   </div>
 </div>
 
@@ -525,27 +551,28 @@ const CONFIG={
    1) Create a folder named "videos" next to this index.html
    2) Copy your edited videos in (use .mp4, H.264, ideally under 20 MB each)
    3) Set the "video" field below, e.g.  video:'videos/ugc-skincare.mp4'
+   (Jumpshare videos use embed:'<id from the share link>'. A category with no
+   videos is hidden from the website automatically.)
    To add a new item copy any line and change cat/title/desc/platform/video.
    cat must be one of: ugc, sports, casino, brand, reels, motion
 ============================================================ */
 const CATEGORIES=[
-  {id:'ugc',label:'AI UGC Ads'},
-  {id:'sports',label:'Sports Promos'},
-  {id:'casino',label:'Casino/Gambling'},
-  {id:'brand',label:'Brand Commercials'},
-  {id:'reels',label:'Reels & Shorts'},
-  {id:'motion',label:'Motion Graphics'}
+  {id:'ugc',label:'AI UGC Ads',emoji:'🤖',blurb:'Testimonial & avatar ads built to convert on Meta'},
+  {id:'sports',label:'Sports Promos',emoji:'⚽',blurb:'Cricket, fantasy & sports channel promos'},
+  {id:'casino',label:'Sports Betting Ads',emoji:'♠️',blurb:'Dark, premium betting platform creatives'},
+  {id:'brand',label:'Brand Commercials',emoji:'👟',blurb:'Cinematic commercials for brands & labels'},
+  {id:'reels',label:'Reels & Shorts',emoji:'🔥',blurb:'Fast-cut edits made for retention'},
+  {id:'motion',label:'Motion Graphics',emoji:'✨',blurb:'Animated launch packages & app promos'}
 ];
 const PORTFOLIO=[
-  {cat:'ugc',emoji:'🤖',title:'AI Avatar Product Launch',desc:'AI-generated UGC avatar ad built for Meta.',platform:'Meta Ads',video:''},
-  {cat:'ugc',emoji:'💄',title:'Beauty UGC Testimonial Ad',desc:'AI-voiced testimonial with a natural UGC feel.',platform:'Meta Ads',video:''},
-  {cat:'sports',emoji:'⚽',title:'Cricket Match Promo',desc:'Cinematic cricket promo for a sports channel.',platform:'Instagram Reels',video:''},
-  {cat:'sports',emoji:'🏀',title:'Fantasy Sports App Promo',desc:'High-conversion creative for a fantasy sports app.',platform:'YouTube Shorts',video:''},
-  {cat:'casino',emoji:'🎰',title:'Casino Platform Launch Ad',desc:'High-energy intro ad with motion graphics and neon effects.',platform:'YouTube Ads',video:''},
-  {cat:'casino',emoji:'♠️',title:'Sports Betting Platform Ad',desc:'Dark luxury betting promo with odds animations.',platform:'Meta Ads',video:''},
-  {cat:'brand',emoji:'👟',title:'Streetwear Brand Commercial',desc:'Luxury-style commercial for a Gen-Z label.',platform:'Instagram & TikTok',video:''},
-  {cat:'reels',emoji:'🔥',title:'Viral Motivational Reel',desc:'Fast-cut motivational edit built for retention.',platform:'Instagram Reels',video:''},
-  {cat:'motion',emoji:'✨',title:'App Launch Motion Package',desc:'Motion graphics package for a product launch.',platform:'Multiple Platforms',video:''}
+  {cat:'ugc',emoji:'💄',title:'Beauty UGC Testimonial Ad',desc:'AI-voiced testimonial with a natural UGC feel.',platform:'Meta Ads',embed:'YXS7vh6mqN3NnJzxfH11'},
+  {cat:'ugc',emoji:'🤖',title:'AI Avatar Product Launch',desc:'AI-generated UGC avatar ad built for Meta.',platform:'Meta Ads',embed:'yv3gu5H64KCAGe6OtNIw'},
+  {cat:'sports',emoji:'🏏',title:'Cricket Match Promo',desc:'Cinematic cricket promo for a sports channel.',platform:'Instagram Reels',embed:'dULFsZlI6PQ9ApbKqeqJ'},
+  {cat:'sports',emoji:'🏀',title:'Fantasy Sports App Promo',desc:'High-conversion creative for a fantasy sports app.',platform:'YouTube Shorts',embed:'9uLMuhr2Dz0TOUEg04gV'},
+  {cat:'casino',emoji:'♠️',title:'Sports Betting Platform Ad',desc:'Dark luxury betting promo with odds animations.',platform:'Meta Ads',embed:'d3QrJaBTUdPBH0G6rSPf'},
+  {cat:'brand',emoji:'👟',title:'Streetwear Brand Commercial',desc:'Luxury-style commercial for a Gen-Z label.',platform:'Instagram & TikTok',embed:'hzLLpp6BXO6kgDJmEJNC'},
+  {cat:'reels',emoji:'🔥',title:'Viral Motivational Reel',desc:'Fast-cut motivational edit built for retention.',platform:'Instagram Reels',embed:'g3SDdwzmgZ53udJrdH0t'},
+  {cat:'motion',emoji:'✨',title:'App Launch Motion Package',desc:'Motion graphics package for a product launch.',platform:'Multiple Platforms',embed:'rlU14lIlu2ZxteptPa8O'}
 ];
 
 /* Add REAL client feedback here and the Testimonials section appears automatically.
@@ -652,28 +679,46 @@ const DB={
 const isAdmin=/[?&]admin\b/.test(location.search);
 if(isAdmin)document.body.classList.add('admin');
 let items=PORTFOLIO.map((p,i)=>({...p,key:'s'+i}));
-let current='all';
-const grid=$('portfolioGrid');
-
-$('filterTabs').innerHTML='<button class="filter-btn active" data-f="all">All Work</button>'+CATEGORIES.map(c=>'<button class="filter-btn" data-f="'+c.id+'">'+c.label+'</button>').join('');
-$('filterTabs').addEventListener('click',e=>{
-  const b=e.target.closest('.filter-btn');if(!b)return;
-  document.querySelectorAll('.filter-btn').forEach(x=>x.classList.remove('active'));
-  b.classList.add('active');current=b.dataset.f;render();
-});
+let current=null;
+const grid=$('portfolioGrid'),picker=$('typePicker'),results=$('results');
 const catLabel=id=>(CATEGORIES.find(c=>c.id===id)||{}).label||'';
 
+function ctaButtons(msg){
+  return '<div class="channel-btns">'
+    +'<a class="channel-btn wa" target="_blank" rel="noopener" href="https://wa.me/'+CONFIG.phone+'?text='+encodeURIComponent(msg)+'"><svg class="icon"><use href="#i-wa"/></svg>WhatsApp</a>'
+    +'<a class="channel-btn tg" target="_blank" rel="noopener" data-copy="'+esc(msg)+'" href="https://t.me/'+CONFIG.telegram+'"><svg class="icon"><use href="#i-tg"/></svg>Telegram</a></div>';
+}
+document.addEventListener('click',async e=>{
+  const a=e.target.closest('a[data-copy]');if(!a)return;
+  const ok=await copyText(a.dataset.copy);
+  toast(ok?'Booking message copied — paste it in Telegram':'Open Telegram and type your message');
+});
+const videoMsg=p=>'Hi! I watched your "'+p.title+'" demo on your website and want to book a '+catLabel(p.cat)+' video'+(p.platform?' for '+p.platform:'')+'. Can we discuss details, price and timeline?';
+
+function renderPicker(){
+  const counts={};items.forEach(i=>counts[i.cat]=(counts[i.cat]||0)+1);
+  picker.innerHTML=CATEGORIES.filter(c=>counts[c.id]).map(c=>'<button class="type-card" type="button" data-cat="'+c.id+'"><span class="type-emoji">'+c.emoji+'</span><span class="type-name">'+esc(c.label)+'</span><span class="type-sub">'+esc(c.blurb)+'</span><span class="type-count">'+counts[c.id]+(counts[c.id]>1?' demos':' demo')+' →</span></button>').join('');
+}
+function showCat(id){
+  current=id;picker.hidden=true;results.hidden=false;
+  $('resultsTitle').textContent=catLabel(id);
+  $('resultsCta').innerHTML='<div class="cta-title">Want a '+esc(catLabel(id))+' video? Book it directly</div>'+ctaButtons('Hi! I want to book a '+catLabel(id)+' video. Please share details, price and timeline.');
+  render();
+  $('portfolio').scrollIntoView({behavior:'smooth'});
+}
+function showPicker(){current=null;results.hidden=true;picker.hidden=false;renderPicker();$('portfolio').scrollIntoView({behavior:'smooth'})}
+picker.addEventListener('click',e=>{const c=e.target.closest('.type-card');if(c)showCat(c.dataset.cat)});
+$('backBtn').addEventListener('click',showPicker);
+
 function render(){
-  const list=current==='all'?items:items.filter(i=>i.cat===current);
-  if(!list.length){grid.innerHTML='<p class="section-sub">No videos in this section yet.</p>';return}
-  grid.innerHTML=list.map((p,i)=>{
-    const media=p.video?'<video src="'+esc(p.video)+'#t=0.5" muted playsinline preload="metadata"></video>':'<span class="thumb-emoji">'+(p.emoji||'🎬')+'</span>';
-    return '<div class="portfolio-card" role="button" tabindex="0" data-key="'+p.key+'" style="animation-delay:'+Math.min(i,8)*40+'ms">'
-      +'<div class="portfolio-thumb">'+media+'<div class="play-btn"><div class="play-icon"></div></div>'
-      +'<div class="portfolio-tag">'+esc(catLabel(p.cat))+'</div>'+(p.video?'':'<div class="soon-tag">DEMO SOON</div>')+'</div>'
-      +'<div class="portfolio-info"><div class="portfolio-platform">'+esc(p.platform||'')+'</div><div class="portfolio-title">'+esc(p.title)+'</div><div class="portfolio-desc">'+esc(p.desc||'')+'</div>'
-      +(p.local&&isAdmin?'<button class="card-del" data-del="'+p.key+'">Delete</button>':'')+'</div></div>';
-  }).join('');
+  const list=items.filter(i=>i.cat===current);
+  grid.innerHTML=list.map((p,i)=>
+    '<div class="portfolio-card" role="button" tabindex="0" data-key="'+p.key+'" style="animation-delay:'+Math.min(i,8)*40+'ms">'
+    +'<div class="portfolio-thumb"><span class="thumb-emoji">'+(p.emoji||'🎬')+'</span><div class="play-btn"><div class="play-icon"></div></div>'
+    +'<div class="portfolio-tag">'+esc(catLabel(p.cat))+'</div></div>'
+    +'<div class="portfolio-info"><div class="portfolio-platform">'+esc(p.platform||'')+'</div><div class="portfolio-title">'+esc(p.title)+'</div><div class="portfolio-desc">'+esc(p.desc||'')+'</div>'
+    +(p.local&&isAdmin?'<button class="card-del" data-del="'+p.key+'">Delete</button>':'')+'</div></div>'
+  ).join('');
 }
 grid.addEventListener('click',e=>{
   const del=e.target.closest('[data-del]');
@@ -681,13 +726,13 @@ grid.addEventListener('click',e=>{
   const card=e.target.closest('.portfolio-card');if(card)openModal(card.dataset.key);
 });
 grid.addEventListener('keydown',e=>{if((e.key==='Enter'||e.key===' ')&&e.target.classList.contains('portfolio-card')){e.preventDefault();openModal(e.target.dataset.key)}});
-render();
+renderPicker();
 
 /* load owner-uploaded previews */
 DB.all().then(recs=>{
   if(!recs.length)return;
   recs.sort((a,b)=>a.id-b.id).forEach(r=>items.push({key:'l'+r.id,id:r.id,local:true,cat:r.cat,title:r.title,desc:r.desc,platform:r.platform,video:URL.createObjectURL(r.blob),emoji:'🎬'}));
-  render();
+  renderPicker();
 });
 
 /* ============================================================
@@ -696,11 +741,17 @@ DB.all().then(recs=>{
 const modal=$('modal'),mVideo=$('modalVideo');
 function openModal(key){
   const p=items.find(x=>x.key===key);if(!p)return;
-  mVideo.innerHTML=p.video?'<video src="'+esc(p.video)+'" controls autoplay playsinline></video>':'<span>'+(p.emoji||'🎬')+'</span>';
-  if(!p.video)mVideo.insertAdjacentHTML('beforeend','');
+  if(p.embed){
+    mVideo.innerHTML='<iframe src="https://jumpshare.com/embed/'+encodeURIComponent(p.embed)+'" title="'+esc(p.title)+'" allow="autoplay; fullscreen" allowfullscreen></iframe>';
+    $('modalAlt').innerHTML='<a href="https://jumpshare.com/share/'+encodeURIComponent(p.embed)+'" target="_blank" rel="noopener">Video not loading? Open it in a new tab ↗</a>';
+  }else{
+    mVideo.innerHTML=p.video?'<video src="'+esc(p.video)+'" controls autoplay playsinline></video>':'<span>'+(p.emoji||'🎬')+'</span>';
+    $('modalAlt').innerHTML='';
+  }
   $('modalTitle').textContent=p.title;
-  $('modalDesc').textContent=p.video?(p.desc||''):((p.desc||'')+' — demo video coming soon.');
+  $('modalDesc').textContent=p.desc||'';
   $('modalPlatform').textContent=p.platform?'Platform: '+p.platform:'';
+  $('modalCta').innerHTML='<div class="cta-title">Like this? Book this type of video</div>'+ctaButtons(videoMsg(p));
   modal.classList.add('open');document.body.style.overflow='hidden';
 }
 function closeModal(){
@@ -725,8 +776,7 @@ if(isAdmin){
     try{
       await DB.put(rec);
       items.push({key:'l'+rec.id,id:rec.id,local:true,cat:rec.cat,title:rec.title,desc:rec.desc,platform:rec.platform,video:URL.createObjectURL(f),emoji:'🎬'});
-      current='all';document.querySelectorAll('.filter-btn').forEach((x,i)=>x.classList.toggle('active',i===0));
-      render();$('adminPanel').classList.remove('open');
+      showCat(rec.cat);$('adminPanel').classList.remove('open');
       ['aTitle','aDesc','aPlatform','aFile'].forEach(id=>$(id).value='');
       toast('Saved on this device. Add it to PORTFOLIO to show visitors.');
     }catch(err){toast('Could not save – storage may be full or blocked')}
