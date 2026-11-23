@@ -228,7 +228,8 @@ footer{background:var(--black);border-top:1px solid var(--border);padding:36px c
 #modal.open{display:flex}
 .modal-content{background:var(--card);border:1px solid var(--border);border-radius:22px;padding:22px;max-width:720px;width:100%;max-height:92vh;overflow:auto;position:relative}
 .modal-close{position:absolute;top:12px;right:12px;width:38px;height:38px;border-radius:50%;background:rgba(0,0,0,.6);border:1px solid var(--border);color:var(--white);font-size:1.1rem;cursor:pointer;z-index:2}
-.modal-video{width:100%;border-radius:14px;background:#000;margin-bottom:16px;overflow:hidden;display:flex;align-items:center;justify-content:center;aspect-ratio:16/9;font-size:3rem}
+.modal-video{width:min(100%,calc(68vh * 9 / 16));aspect-ratio:9/16;margin:0 auto 16px;border-radius:14px;background:#000;overflow:hidden;display:flex;align-items:center;justify-content:center;font-size:3rem}
+.modal-video.landscape{width:100%;aspect-ratio:16/9}
 .modal-video video{width:100%;max-height:70vh;display:block;background:#000}
 .modal-title{font-family:'Syne',sans-serif;font-size:1.25rem;font-weight:700;margin-bottom:8px}
 .modal-desc{font-size:.9rem;color:var(--muted);line-height:1.6}
@@ -551,6 +552,7 @@ const CONFIG={
    1) Create a folder named "videos" next to this index.html
    2) Copy your edited videos in (use .mp4, H.264, ideally under 20 MB each)
    3) Set the "video" field below, e.g.  video:'videos/ugc-skincare.mp4'
+   (Videos are vertical 9:16 by default. For a horizontal video add ratio:'16/9'.)
    (Jumpshare videos use embed:'<id from the share link>'. A category with no
    videos is hidden from the website automatically.)
    To add a new item copy any line and change cat/title/desc/platform/video.
@@ -741,6 +743,7 @@ DB.all().then(recs=>{
 const modal=$('modal'),mVideo=$('modalVideo');
 function openModal(key){
   const p=items.find(x=>x.key===key);if(!p)return;
+  mVideo.classList.toggle('landscape',p.ratio==='16/9');
   if(p.embed){
     mVideo.innerHTML='<iframe src="https://jumpshare.com/embed/'+encodeURIComponent(p.embed)+'" title="'+esc(p.title)+'" allow="autoplay; fullscreen" allowfullscreen></iframe>';
     $('modalAlt').innerHTML='<a href="https://jumpshare.com/share/'+encodeURIComponent(p.embed)+'" target="_blank" rel="noopener">Video not loading? Open it in a new tab ↗</a>';
